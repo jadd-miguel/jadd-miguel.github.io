@@ -1,0 +1,20 @@
+.lang-table {
+    border-collapse: collapse;
+}
+
+.lang-table td {
+    vertical-align: top;
+    padding: 5px;
+    border: 1px solid white;
+}
+
+.col-body {
+    padding: 0 0 0 25px;
+}
+
+.interest-img{
+    width: 250px;
+    height: auto;
+    border-radius: 10%;
+    padding: 10px;
+}

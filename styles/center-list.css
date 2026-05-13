@@ -1,0 +1,16 @@
+.center-list {
+    padding: 40px 15px 15px 15px;
+}
+
+.center-list li {
+    margin: 0 0 20px 0;
+}
+
+.center-list a {
+    text-transform: uppercase;
+    display: block;
+    text-align: center;
+    letter-spacing: 1px;
+    font-size: 1.4rem;
+    font-weight: 500;
+}

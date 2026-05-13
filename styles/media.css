@@ -1,0 +1,26 @@
+@media (max-width: 1024px) {
+
+    html {
+        font-size: 18px;
+    }
+
+    .title {
+        display: none;
+    }
+
+    .row {
+        flex-direction: column;
+    }
+
+    .interest-img {
+        width: 60px;
+    }
+
+    .for-desktop {
+        display: none;
+    }
+
+    .for-mobile {
+        display: block;
+    }
+}

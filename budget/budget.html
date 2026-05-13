@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUDGET - MY SITE</title>
+    <link rel="stylesheet" href="../styles/general.css">
+    <link rel="stylesheet" href="../styles/nav-top.css">
+    <link rel="stylesheet" href="../styles/media.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.plot.ly/plotly-3.4.0.min.js" charset="utf-8"></script>
+    <script src="./utility.js" defer></script>
+    <script src="./budget.js" defer></script>
+</head>
+<nav>
+    <ul class="nav-top">
+        <li>
+            <a href="../index.html">
+                <i class="fa-solid fa-house"></i>
+            </a>
+        </li>
+        <li>
+            <div class="title">BUDGET</div>
+        </li>
+    </ul>
+</nav>
+<body>
+    <div class="for-desktop">
+        <div class="row">
+            <div class="col">
+                <input type="file" id="folderInput" webkitdirectory multiple>
+                <button id="toRun">Run Selected</button>
+                <button id="toDemo">Run Demo</button>
+                <p>Note: Try run demo because the "run select" only works for my specific banking.</p>
+            </div>
+        </div>
+        <div class="row" id="trend"></div>
+        <div class="row" id="date_net"></div>
+    </div>
+    <div class="for-mobile">
+        <h1>Module Unavailable For Mobile</h1>
+    </div>
+</body>
+</html>

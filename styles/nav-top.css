@@ -1,0 +1,30 @@
+nav {
+    position: sticky;
+    top: 0;
+}
+
+.nav-top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+}
+
+.nav-top li {
+    padding: 12px;
+}
+
+.nav-top a {
+    font-size: 44px;
+    padding: 8px;
+    border-radius: 10px;
+}
+
+.nav-top a:hover {
+    color: black;
+    background-color: white;
+}
+
+.title {
+    font-size: 1.6rem;
+}
