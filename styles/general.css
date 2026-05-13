@@ -42,9 +42,14 @@ h1 {
     display: flex;
     width: 90%;
     margin: 0 auto;
-
+    padding-bottom: 30px;
 }
 
 .col {
     flex: 1;
+}
+
+.center {
+    width: 300px;
+    margin: 0 auto;
 }

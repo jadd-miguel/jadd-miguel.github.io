@@ -1,17 +1,19 @@
 let calendar;
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     var calendarEl = document.getElementById('calendar');
     calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth'
     });
     calendar.render();
+    await update_visuals()
 });
 
 let event_list = [];
 class Event {
-    constructor(date, cat, info) {
+    constructor(date, cat, info, id=null) {
+        this.id = id;
         this.date = date;
-        this.cat = cat;
+        this.category = cat;
         this.info = info;
     }
 
@@ -20,20 +22,21 @@ class Event {
     }
 }
 
-function event_add() {
+async function event_add() {
     const date = document.getElementById("event-date").value;
     const category = document.getElementById("event-cat").value;
     const info = document.getElementById("event-info").value;
 
-    event_list.push(new Event(date, category, info));
+    await insertData("schedule", [new Event(date, category, info)])
     update_visuals();
 }
 
-function update_visuals() {
+async function update_visuals() {
     const list = document.getElementById("event-list");
     list.innerHTML = "";
     calendar.removeAllEvents();
-
+    vals = await getData("schedule")
+    event_list = vals.map(e => (new Event(e.date, e.category, e.info, e.id)))
     event_list.forEach((event, index) => {
 
         calendar.addEvent({
@@ -48,7 +51,7 @@ function update_visuals() {
         btn.textContent = "X";
 
         btn.onclick = () => {
-            event_list.splice(index, 1);
+            deleteData("schedule", event.id)
             update_visuals();
         };
 

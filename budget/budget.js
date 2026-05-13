@@ -1,6 +1,10 @@
 let files = [];
 // ADD TREND, ZERO AMOUNT, BUY CATEGORY, MONTHLY
 
+window.addEventListener("DOMContentLoaded", () => {
+  run_demo()
+})
+
 document.getElementById("folderInput").addEventListener("change", (e) => {
     files = e.target.files;
 });
@@ -11,10 +15,14 @@ document.getElementById("toRun").addEventListener("click", async () => {
 });
 
 document.getElementById("toDemo").addEventListener("click", async () => {
-    const response = await fetch("./demo.csv");
+    run_demo()
+});
+
+async function run_demo() {
+    const response = await fetchFile("budget_demo.csv");
     const df = await files_to_df([response]);
     update_plot(df);
-});
+}
 
 async function files_to_df(files) {
     let logs = await get_logs(files);
