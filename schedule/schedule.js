@@ -44,7 +44,7 @@ async function update_visuals() {
         })
 
         const li = document.createElement("li")
-        li.textContent = event.print()
+        li.textContent = event.print() + " "
 
         const btn = document.createElement("button")
         btn.textContent = "X"
