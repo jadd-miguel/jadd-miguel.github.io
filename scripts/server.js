@@ -1,11 +1,12 @@
-const supabaseUrl = "https://aezewrnpboaixgjbvyoc.supabase.co"
-const supabaseAnonKey = "sb_publishable_IcZSnNPX54lkgnTqQMAZ8g_OTxa2V-T"
+const SERVER_URL = "https://aezewrnpboaixgjbvyoc.supabase.co"
+const ANON_KEY = "sb_publishable_IcZSnNPX54lkgnTqQMAZ8g_OTxa2V-T"
 
-const client = supabase.createClient(supabaseUrl, supabaseAnonKey)
+const CLIENT = supabase.createClient(SERVER_URL, ANON_KEY)
+const FILE_STORAGE = "my site"
 
 async function fetchFile(name) {
-    const { data, error } = await client.storage
-        .from("my site")
+    const { data, error } = await CLIENT.storage
+        .from(FILE_STORAGE)
         .download(name)
 
     if (error) {
@@ -17,7 +18,7 @@ async function fetchFile(name) {
 }
 
 async function insertData(table, load) {
-    const { data, error } = await client
+    const { _, error } = await CLIENT
         .from(table)
         .insert(load)
 
@@ -29,7 +30,7 @@ async function insertData(table, load) {
 }
 
 async function deleteData(table, id) {
-    const { data, error } = await client
+    const { data, error } = await CLIENT
         .from(table)
         .delete()
         .eq("id", id)
@@ -41,8 +42,8 @@ async function deleteData(table, id) {
     }
 }
 
-async function getData(table, id) {
-    const { data, error } = await client
+async function getData(table) {
+    const { data, error } = await CLIENT
         .from(table)
         .select("*")
 

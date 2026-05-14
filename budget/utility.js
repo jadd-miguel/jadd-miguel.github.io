@@ -1,38 +1,38 @@
 async function get_logs(files) {
     let file_logs = [];
     for (const file of files) {
-        let text = await file.text();
-        text = text.trim();
-        file_logs.push(text);
+        let text = await file.text()
+        text = text.trim()
+        file_logs.push(text)
     }
-    const all_logs = file_logs.join("\n");
-    return all_logs;
+    const all_logs = file_logs.join("\n")
+    return all_logs
 }
 
 function parse_logs(raw_logs) {
         
-    const logs = raw_logs.split("\n");
-    let parsed_logs = [];
+    const logs = raw_logs.split("\n")
+    let parsed_logs = []
 
     for (const log of logs) {
-        let parsed = log.split(",").map(r => r.replace(/"/g, ""));
-        parsed_logs.push(parsed);
+        let parsed = log.split(",").map(r => r.replace(/"/g, ""))
+        parsed_logs.push(parsed)
     }
-    return parsed_logs;
+    return parsed_logs
 }
 
 class Transaction {
-    constructor(date, title, net, total, deduct, credit) {
+    constructor(date, title, deduct, credit, total, net) {
         this.date = date;
         this.title = title;
-        this.net = net;
-        this.total = total;
         this.deduct = deduct;
         this.credit = credit;
+        this.total = total;
+        this.net = net;
     }
 }
 
-const DISCARD = ["INITIAL"];
+const DISCARD = ["INITIAL"]
 function get_df(raw_logs) {
     let df = [];
     let logs = [];
@@ -47,51 +47,52 @@ function get_df(raw_logs) {
         }
     }
 
-    logs = logs.map(r => r.slice(0, -1));
-    logs.sort((a, b) => new Date(a[0]) - new Date(b[0]));
+    logs = logs.map(r => r.slice(0, -1))
+    logs.sort((a, b) => new Date(a[0]) - new Date(b[0]))
 
     for (const log of logs) {
         let date = log[0]
-        let title = log[1].replace(/\s+/g, " ");
+        let title = log[1].replace(/\s+/g, " ")
 
-        let deduct = log[2] === "" ? 0 : Number(log[2]);
-        let credit = log[3] === "" ? 0 : Number(log[3]);
-        let net = credit - deduct;
+        let deduct = log[2] === "" ? 0 : Number(log[2])
+        let credit = log[3] === "" ? 0 : Number(log[3])
+        let net = credit - deduct
 
         total = total + net
-        df.push(new Transaction(date, title, net, total, deduct, credit));
+        df.push(new Transaction(date, title, deduct, credit, total, net))
     }
-    return df;
+    return df
 }
 
-const AGG_OPTIONS = [NET = "net", TOTAL = "total"];
+const AGG_OPTIONS = [NET = "net", TOTAL = "total"]
 function group_by_date(df, option) {
-    let dates = {};
+    let dates = {}
 
     for (const row of df) {
 
-        const key = row.date;
-        let value = "";
+        const key = row.date
+        let value = ""
 
         switch (option) {
             case AGG_OPTIONS.NET:
-                value = row.net;
-                break;
+                value = row.net
+                break
 
             case AGG_OPTIONS.TOTAL:
-                value = row.total;
-                break;
-        };
+                value = row.total
+                break
+        }
 
         if (!dates[key]) {
-            dates[key] = [];
+            dates[key] = []
         }     
-        dates[key].push(value);
+        dates[key].push(value)
     }
 
-    const agg = Object.entries(dates).map(([key, values]) => ({
-        key,
-        sum: values.reduce((a, b) => a+b, 0)
-    }));
-    return agg;
+    const agg = Object.entries(dates)
+        .map(([key, values]) => ({
+            key,
+            sum: values.reduce((a, b) => a+b, 0)
+        }))
+    return agg
 }
