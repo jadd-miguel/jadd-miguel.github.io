@@ -16,7 +16,7 @@ class Event {
         this.category = cat;
         this.info = info;
     }
-    print() { return this.date + " " + this.cat + " " + this.info }
+    print() { return this.date + " " + this.category + " " + this.info }
 }
 
 async function event_add() {

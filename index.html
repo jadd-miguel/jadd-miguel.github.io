@@ -9,20 +9,24 @@
     <link rel="stylesheet" href="./styles/center-list.css">
     <link rel="stylesheet" href="./styles/media.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="./styles/snackbar.css">
+    <script src="./scripts/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./scripts/server.js" defer></script>
+    <script src="./scripts/home.js" defer></script>
 </head>
-<nav>
-    <ul class="nav-top">
-        <li>
-            <a class="home-icon" href="./index.html">
-                <i class="fa-solid fa-house"></i>
-            </a>
-        </li>
-        <li class="title">
-            <div>HOME</div>
-        </li>
-    </ul>
-</nav>
 <body>
+    <nav>
+        <ul class="nav-top">
+            <li>
+                <a class="home-icon" href="./index.html">
+                    <i class="fa-solid fa-house"></i>
+                </a>
+            </li>
+            <li class="title"></li>
+        </ul>
+    </nav>
+    <div id="snackbar"></div>
     <div class="center-list">
         <ul>
             <li>
@@ -45,9 +49,7 @@
                     More About Me
                 </a>
             </li>
-            <li>
-                <br>
-            </li>
+            <li><br></li>
             <li>
                 <a href="https://www.linkedin.com/in/jadd-arriola/" target="_blank" rel="noreferrer">
                     Linkedin ↗
@@ -62,6 +64,15 @@
                 <a href="https://github.com/jadd-miguel?tab=repositories" target="_blank" rel="noreferrer">
                     Repositories ↗
                 </a>
+            </li>
+            <li><br></li>
+            <li class="login">
+                <input type="email" id="email" placeholder="Email" autocomplete="off">
+                <input type="password" id="password" placeholder="Password" autocomplete="off">
+                <button  onclick="login()">Login</button>
+            </li>
+            <li class="logout">
+                <button  onclick="logout()">Logout</button>
             </li>
         </ul>
     </div>
