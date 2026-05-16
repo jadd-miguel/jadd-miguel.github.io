@@ -1,34 +1,33 @@
-let files = [];
-// ADD TREND, ZERO AMOUNT, BUY CATEGORY, MONTHLY
+let files = []
 
 window.addEventListener("DOMContentLoaded", () => {
   run_demo()
 })
 
 document.getElementById("folderInput").addEventListener("change", (e) => {
-    files = e.target.files;
-});
+    files = e.target.files
+})
 
 document.getElementById("toRun").addEventListener("click", async () => {
     const df = await files_to_df(files);
-    update_plot(df);
-});
+    update_plot(df)
+})
 
 document.getElementById("toDemo").addEventListener("click", async () => {
     run_demo()
-});
+})
 
 async function run_demo() {
-    const response = await fetchFile("budget_demo.csv");
-    const df = await files_to_df([response]);
-    update_plot(df);
+    const response = await fetchFile("budget_demo.csv")
+    const df = await files_to_df([response])
+    update_plot(df)
 }
 
 async function files_to_df(files) {
-    let logs = await get_logs(files);
-    let parsed_logs = parse_logs(logs);
-    let df = get_df(parsed_logs);
-    return df;
+    let logs = await get_logs(files)
+    let parsed_logs = parse_logs(logs)
+    let df = get_df(parsed_logs)
+    return df
 }
 
 function update_plot(df) {
@@ -46,9 +45,9 @@ function update_plot(df) {
             xaxis: { title: { text: "Days"} },
             yaxis: { title: { text: "Amount Holding ($)"} }
         }
-    );
+    )
 
-    const net_agg = group_by_date(df, AGG_OPTIONS.NET);
+    const net_agg = group_by_date(df, AGG_OPTIONS.NET)
     Plotly.newPlot(
         "date_net",
         [{
@@ -64,5 +63,5 @@ function update_plot(df) {
             xaxis: { title: { text: "Days"} },
             yaxis: { title: { text: "Net Change ($)"} }
         }
-    );
+    )
 }
