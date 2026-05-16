@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', async function() {
-    const { data, error } = await CLIENT.auth.getSession()
+    const { data, _ } = await CLIENT.auth.getSession()
     const session = data.session
+        console.log(data)
     if(!document.querySelector(".login") || !document.querySelector(".logout")) {
         return
     }

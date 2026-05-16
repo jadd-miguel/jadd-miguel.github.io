@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCHEDULE - MY SITE</title>
+    <link rel="icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/general.css">
     <link rel="stylesheet" href="../styles/nav-top.css">
     <link rel="stylesheet" href="../styles/media.css">
@@ -16,32 +17,30 @@
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.20/index.global.min.js'></script>
     <script src="./schedule.js" defer></script>
 </head>
-<nav>
-    <ul class="nav-top">
-        <li>
-            <a href="../index.html">
-                <i class="fa-solid fa-house"></i>
-            </a>
-        </li>
-        <li class="title">
-            <div>SCHEDULE</div>
-        </li>
-    </ul>
-</nav>
 <body>
+    <nav>
+        <ul class="nav-top">
+            <li>
+                <a href="../index.html">
+                    <i class="fa-solid fa-house"></i>
+                </a>
+            </li>
+            <li class="title"></li>
+        </ul>
+    </nav>
     <div id="snackbar"></div>
     <div class="row">
         <div class="col">
             <div id='calendar'></div>
         </div>
         <div class="col">
-            <div class="log-form">
-                <div>
+            <div class="event-modal">
+                <form>
                     <input type="date" id="event-date">
                     <input type="text" id="event-cat" placeholder="category">
                     <input type="text" id="event-info" placeholder="info">
                     <button onclick="event_add()">Add</button>
-                </div>
+                </form>
                 <div id="event-list"></div>
             </div>
         </div>

@@ -1,7 +1,11 @@
 const SERVER_URL = "https://aezewrnpboaixgjbvyoc.supabase.co"
 const ANON_KEY = "sb_publishable_IcZSnNPX54lkgnTqQMAZ8g_OTxa2V-T"
 
-const CLIENT = supabase.createClient(SERVER_URL, ANON_KEY)
+const CLIENT = supabase.createClient(SERVER_URL, ANON_KEY, {auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true
+  }})
 const FILE_STORAGE = "my site"
 
 async function login() {
@@ -45,6 +49,7 @@ async function fetchFile(name) {
 
     if (error) {
         show_snackbar("Fetch File Error: " + error.message)
+        return
     } else {
         show_snackbar("Fetch File Success")
     }
@@ -55,11 +60,13 @@ async function insertData(table, load) {
     const { _, error } = await CLIENT
         .from(table)
         .insert(load)
-
+    console.log(error)
     if (error) {
         show_snackbar("Insert Error: " + error.message)
+        return false
     } else {
         show_snackbar("Insert Success")
+        return true
     }
 }
 
@@ -68,24 +75,24 @@ async function deleteData(table, id) {
         .from(table)
         .delete()
         .eq("id", id)
-
     if (error) {
         show_snackbar("Delete Error: " + error.message)
+        return false
     } else {
         show_snackbar("Delete Success")
+        return true
     }
 }
 
-async function fetchtData(table) {
-    show_snackbar("Fetching " + table)
+async function fetchData(table) {
     const { data, error } = await CLIENT
         .from(table)
         .select("*")
-
     if (error) {
-        show_snackbar("Fetch Data Error: ", error)
+        show_snackbar("Fetch Data Error: ", error.message)
+        return
     } else {
-        show_snackbar("Fetch Success")
+        console.log("Fetch Success")
     }
     return data
 }

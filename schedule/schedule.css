@@ -1,7 +1,24 @@
-.log-form {
-    padding: 0 25px 0 25px;
+.event-modal {
+    padding: 0 15px 0 15px;
+}
+
+.event-modal form {
+    display: flex;
+}
+
+#event-date, #event-cat, #event-info {
+    margin: 0 3px 0 3px;
+    width: 150px;
 }
 
 #event-list {
     padding: 25px 0 0 12px;
+}
+
+#event-list li {
+    padding: 8px;
+    border-radius: 5px;
+    background-color: gray;
+    display: flex;
+    align-items: center;
 }
