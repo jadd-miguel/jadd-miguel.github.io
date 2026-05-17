@@ -29,11 +29,11 @@
         </ul>
     </nav>
     <div id="snackbar"></div>
-    <div class="row">
-        <div class="col">
+    <div class="sched-row">
+        <div class="sched-col">
             <div id='calendar'></div>
         </div>
-        <div class="col">
+        <div class="sched-col">
             <div class="event-modal">
                 <form>
                     <input type="date" id="event-date">
@@ -41,8 +41,8 @@
                     <input type="text" id="event-info" placeholder="info">
                     <button onclick="event_add()">Add</button>
                 </form>
-                <div id="event-list"></div>
             </div>
+            <ul id="event-list"></ul>
         </div>
     </div>
 </body>

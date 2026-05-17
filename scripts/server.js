@@ -89,7 +89,7 @@ async function fetchData(table) {
         .from(table)
         .select("*")
     if (error) {
-        show_snackbar("Fetch Data Error: ", error.message)
+        show_snackbar("Fetch Data Error: " + error.message)
         return
     } else {
         console.log("Fetch Success")

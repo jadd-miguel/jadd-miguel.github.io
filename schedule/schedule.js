@@ -1,6 +1,5 @@
 let calendar = null
 document.addEventListener('DOMContentLoaded', async function() {
-    show_snackbar("Loading")
     await permissions()
     await inital_calendar()
 })
@@ -36,7 +35,7 @@ class Event {
         this.category = cat;
         this.info = info;
     }
-    print() { return this.date + " " + this.category + " " + this.info }
+    print() { return this.date + ", " + this.category + ", " + this.info }
 }
 
 async function event_add() {
@@ -50,6 +49,7 @@ async function event_add() {
     await update_visuals()
 }
 
+const COLORS = ["red", "blue", "green", "orange", "purple", "teal", "pink",]
 async function update_visuals() {
     const list_html = document.getElementById("event-list")
     list_html.innerHTML = ""
@@ -59,14 +59,29 @@ async function update_visuals() {
     fetched_events = await fetchData("schedule")
 
     event_list = fetched_events.map(e => (new Event(e.date, e.category, e.info, e.id)))
+    event_list.sort((a, b) => a.category.localeCompare(b.category));
+
+    curr_cat = ""
+    color_idx = 0
     event_list.forEach((event, _) => {
 
+        if(curr_cat == "") {
+            curr_cat = event.category
+        }
+        else if(curr_cat != event.category) {
+            curr_cat = event.category
+            color_idx++
+        }
+        
         calendar.addEvent({
             title: event.category,
-            start: event.date
+            start: event.date,
+            color: COLORS[color_idx]
         })
         const li = document.createElement("li")
-        li.textContent = event.print() + " "
+        
+        const span = document.createElement("span")
+        span.textContent = event.print()
 
         const btn = document.createElement("button")
         btn.textContent = "X"
@@ -77,6 +92,8 @@ async function update_visuals() {
                 return
             update_visuals();
         }
+        li.style.backgroundColor = COLORS[color_idx]
+        li.appendChild(span)
         li.appendChild(btn)
         list_html.appendChild(li)
     })
