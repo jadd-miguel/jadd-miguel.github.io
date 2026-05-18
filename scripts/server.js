@@ -96,3 +96,18 @@ async function fetchData(table) {
     }
     return data
 }
+
+const LANG_TABLE = "language"
+async function fetchLangRules(language) {
+    const { data, error } = await CLIENT
+        .from(LANG_TABLE)
+        .select("*")
+        .eq("language", language)
+    if (error) {
+        show_snackbar("Fetch Language Error: " + error.message)
+        return
+    } else {
+        console.log("Fetch Language Success")
+    }
+    return data
+}

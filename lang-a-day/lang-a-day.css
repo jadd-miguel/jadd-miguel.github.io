@@ -1,0 +1,27 @@
+form {
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.lang-col {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+#content {
+    font-size: 2rem;
+}
+
+#rule {
+    font-size: 1.2rem;
+}
+
+@media (max-width: 1024px) {
+    form {
+        flex-direction: column;
+    }
+}
