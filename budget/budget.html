@@ -15,6 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../scripts/server.js" defer></script>
     <script src="./utility.js" defer></script>
+    <script src="./plotting.js"></script>
     <script src="./budget.js" defer></script>
 </head>
 <body>
@@ -31,14 +32,32 @@
     <div id="snackbar"></div>
     <div class="for-desktop">
         <div class="budget-row">
-            <form>
+            <form id="options">
                 <input type="file" id="folderInput" webkitdirectory multiple>
                 <button id="toRun">Run Selected</button>
                 <button id="toDemo">Run Demo</button>
+                <label>Options: </label>
+                <button type="button" id="byDay" class="active">Day</button>
+                <button type="button" id="byMonth">Month</button>
+                <label>Maximum Range: </label>
+                <input type="date" id="start-range">
+                <input type="date" id="end-range">
             </form>
         </div>
+        <div class="budget-row">
+            <div id="slope"></div>
+            <div id="zero"></div>
+        </div>
         <div class="budget-row" id="trend"></div>
-        <div class="budget-row" id="date_net"></div>
+        <div class="budget-row">
+            <form>
+                <label>Options: </label>
+                <button type="button" id="byNet" class="active">Net</button>
+                <button type="button" id="byDeduct">Deduct</button>
+                <button type="button" id="byCredit">Credit</button>
+            </form></div>
+        <div class="budget-row" id="data_net"></div>
+        <div class="budget-row" id="category"></div>
     </div>
     <div class="for-mobile">
         <h1>Module Unavailable For Mobile</h1>

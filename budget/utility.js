@@ -22,12 +22,12 @@ function parse_logs(raw_logs) {
 }
 
 class Transaction {
-    constructor(date, title, deduct, credit, total, net) {
+    constructor(date, title, deduct, credit, amount, net) {
         this.date = date;
         this.title = title;
         this.deduct = deduct;
         this.credit = credit;
-        this.total = total;
+        this.amount = amount;
         this.net = net;
     }
 }
@@ -58,41 +58,102 @@ function get_df(raw_logs) {
         let credit = log[3] === "" ? 0 : Number(log[3])
         let net = credit - deduct
 
-        total = total + net
-        df.push(new Transaction(date, title, deduct, credit, total, net))
+        amount = total + net
+        df.push(new Transaction(date, title, deduct, credit, amount, net))
     }
     return df
 }
 
-const AGG_OPTIONS = [NET = "net", TOTAL = "total"]
-function group_by_date(df, option) {
-    let dates = {}
+const AGG_VALUES = {NET: "Net", AMOUNT: "Amount", DEDUCT: "Deduct", CREDIT: "Credit"}
+const X_OPTIONS = { BY_DAY: "Days", BY_MONTH: "Months", BY_CATEGORY: "Categories" }
+function group_by(df, agg_value, x_options) {
 
+    let dates = {}
     for (const row of df) {
 
-        const key = row.date
-        let value = ""
-
-        switch (option) {
-            case AGG_OPTIONS.NET:
-                value = row.net
+        let key = ""
+        switch (x_options) {
+            case X_OPTIONS.BY_DAY:
+                key = row.date
                 break
 
-            case AGG_OPTIONS.TOTAL:
-                value = row.total
+            case X_OPTIONS.BY_MONTH:
+                key = row.date.slice(0, 7)
+                break
+            case X_OPTIONS.BY_CATEGORY:
+                key = row.title
                 break
         }
 
+        let value = ""
+        switch (agg_value) {
+            case AGG_VALUES.AMOUNT:
+                value = row.amount
+                break
+            case AGG_VALUES.NET:
+                value = row.net
+                break
+            case AGG_VALUES.DEDUCT:
+                value = row.deduct * -1
+                break
+            case AGG_VALUES.CREDIT:
+                value = row.credit
+                break
+        }
         if (!dates[key]) {
             dates[key] = []
         }     
         dates[key].push(value)
     }
-
     const agg = Object.entries(dates)
         .map(([key, values]) => ({
             key,
-            sum: values.reduce((a, b) => a+b, 0)
+            sum: agg_value == AGG_VALUES.AMOUNT ? 
+                values.at(-1) : values.reduce((a, b) => a+b, 0)
         }))
     return agg
+}
+
+function fill_agg(agg, start, end) {
+    let filled = []
+    let dates = agg.map(x => x.key)
+    let last_val = null
+    for(let d = new Date(start); d <= new Date(end); d.setDate(d.getDate() + 1)) {
+        const chk_date = d.toISOString().split("T")[0]
+
+        if(dates.includes(chk_date)) {
+            const existing = agg.find(d => d.key === chk_date)
+            last_val = existing.sum
+            filled.push(existing)
+        } else {
+            filled.push({key: chk_date, sum: last_val})
+        }
+    }
+    console.log(filled)
+    return filled
+}
+
+function linearRegression(agg) {
+    const points = agg.map((day, i) => ({
+        x: i,
+        y: day.sum
+    }))
+    const sumX = points.reduce((s, p) => s + p.x, 0)
+    const sumY = points.reduce((s, p) => s + p.y, 0)
+    const sumXY = points.reduce((s, p) => s + p.x * p.y, 0)
+    const sumXX = points.reduce((s, p) => s + p.x * p.x, 0)
+
+    const n = points.length;
+    const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX)
+
+    const intercept = (sumY - slope * sumX) / n
+    return { slope, intercept }
+}
+
+function toDayNumber(str) {
+    const y = +str.slice(0, 4)
+    const m = +str.slice(5, 7)
+    const d = +str.slice(8, 10)
+
+    return Date.UTC(y, m - 1, d) / 86400000
 }

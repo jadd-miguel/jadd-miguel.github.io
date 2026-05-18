@@ -62,7 +62,6 @@ async function update_visuals() {
 
     event_list = fetched_events.map(e => (new Event(e.date, e.category, e.info, e.id, e.done)))
     event_list.sort((a, b) =>
-        (a.category === SPECIAL_CATEGORY ? -1 : b.category === SPECIAL_CATEGORY ? 1 : 0) ||
         a.category.localeCompare(b.category) ||
         b.done - a.done ||
         new Date(a.date ?? 0) - new Date(b.date ?? 0) ||
