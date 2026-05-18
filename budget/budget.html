@@ -8,36 +8,37 @@
     <link rel="stylesheet" href="../styles/nav-top.css">
     <link rel="stylesheet" href="../styles/media.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles/snackbar.css">
+    <link rel="stylesheet" href="./budget.css">
     <script src="https://cdn.plot.ly/plotly-3.4.0.min.js" charset="utf-8"></script>
+    <script src="../scripts/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../scripts/server.js" defer></script>
     <script src="./utility.js" defer></script>
     <script src="./budget.js" defer></script>
 </head>
-<nav>
-    <ul class="nav-top">
-        <li>
-            <a href="../index.html">
-                <i class="fa-solid fa-house"></i>
-            </a>
-        </li>
-        <li>
-            <div class="title">BUDGET</div>
-        </li>
-    </ul>
-</nav>
 <body>
+    <nav>
+        <ul class="nav-top">
+            <li>
+                <a href="../index.html">
+                    <i class="fa-solid fa-house"></i>
+                </a>
+            </li>
+            <li class="title"></li>
+        </ul>
+    </nav>
+    <div id="snackbar"></div>
     <div class="for-desktop">
-        <div class="row">
-            <div class="col">
+        <div class="budget-row">
+            <form>
                 <input type="file" id="folderInput" webkitdirectory multiple>
                 <button id="toRun">Run Selected</button>
                 <button id="toDemo">Run Demo</button>
-                <p>Note: Try run demo because the "run select" only works for my specific banking.</p>
-            </div>
+            </form>
         </div>
-        <div class="row" id="trend"></div>
-        <div class="row" id="date_net"></div>
+        <div class="budget-row" id="trend"></div>
+        <div class="budget-row" id="date_net"></div>
     </div>
     <div class="for-mobile">
         <h1>Module Unavailable For Mobile</h1>

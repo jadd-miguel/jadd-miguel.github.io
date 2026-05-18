@@ -1,3 +1,16 @@
+document.addEventListener('DOMContentLoaded', async function() {
+    const { data, _ } = await CLIENT.auth.getSession()
+    const session = data.session
+
+    if(session) {
+        document.querySelector('.title').innerHTML  = "Budget <i>As Privileged User</i>"
+    } else {
+        document.querySelector('.title').innerHTML  = "Budget <i>As Demo User</i>"
+        document.querySelectorAll('input, button').forEach(el => el.disabled = true)
+    }
+})
+
+
 let files = []
 
 window.addEventListener("DOMContentLoaded", () => {

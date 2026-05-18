@@ -1,0 +1,13 @@
+.budget-row {
+    font-size: 0.45rem;
+    display: flex;
+    width: 90%;
+    margin: 0 auto;
+    padding: 25px 0 25px 0;
+}
+
+form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}

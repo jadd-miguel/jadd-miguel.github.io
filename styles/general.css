@@ -56,3 +56,13 @@ h1 {
 .col {
     flex: 1;
 }
+
+input:disabled,
+button:disabled {
+    background-color: #ccc;
+    color: #666;
+    border: 1px solid #999;
+    border-radius: 5px;
+    opacity: 0.8;
+    cursor: not-allowed;
+}
