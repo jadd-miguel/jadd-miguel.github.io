@@ -60,12 +60,25 @@ async function insertData(table, load) {
     const { _, error } = await CLIENT
         .from(table)
         .insert(load)
-    console.log(error)
     if (error) {
         show_snackbar("Insert Error: " + error.message)
         return false
     } else {
         show_snackbar("Insert Success")
+        return true
+    }
+}
+
+async function editData(table, load, id) {
+    const { _, error } = await CLIENT
+        .from(table)
+        .update(load)
+        .eq("id", id)
+    if (error) {
+        show_snackbar("Edit Error: " + error.message)
+        return false
+    } else {
+        show_snackbar("Edit Success")
         return true
     }
 }
@@ -110,4 +123,19 @@ async function fetchLangRules(language) {
         console.log("Fetch Language Success")
     }
     return data
+}
+
+async function insertLangPoints(id, pts) {
+    const { data, error } = await CLIENT
+        .from(LANG_TABLE)
+        .update({
+            points: pts
+        })
+        .eq("id", id)
+    if (error) {
+        show_snackbar("Points Add Error: " + error.message)
+        return
+    } else {
+        console.log("Points Add Success")
+    }
 }

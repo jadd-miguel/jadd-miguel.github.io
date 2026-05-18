@@ -23,9 +23,7 @@
                     <i class="fa-solid fa-house"></i>
                 </a>
             </li>
-            <li>
-                <div class="title">LANG-A-DAY</div>
-            </li>
+            <li class="title"></li>
         </ul>
     </nav>
     <div id="snackbar"></div>
@@ -51,21 +49,18 @@
             </form>
         </div>
     </div>
-    <div class="row">
+    <div class="lang-row">
         <button onclick="grabLangRules()" style="font-size: 2rem;">Practice</button>
+        <button id="ruleAndPoints" onclick="ruleAndPoints()" style="font-size: 2rem;">Points+</button>
     </div>
-    <div class="row">
-        <div class="lang-col">
-            <div id="content">
-                &#9744;&#9744;&#9744;&#9744;&#9744;&#9744;&#9744;&#9744;
-            </div>
+    <div class="lang-row">
+        <div id="rule">
+            &#9744;&#9744;&#9744;&#9744;&#9744;&#9744;&#9744;&#9744;
         </div>
     </div>
-    <div class="row">
-        <div class="lang-col">
-            <div id="rule">
-                &#9744;&#9744;&#9744;&#9744;&#9744;&#9744;&#9744;&#9744;
-            </div>
+    <div class="lang-row">
+        <div id="content">
+            &#9744;&#9744;&#9744;&#9744;&#9744;&#9744;&#9744;&#9744;
         </div>
     </div>
 </body>

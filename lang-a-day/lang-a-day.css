@@ -5,19 +5,28 @@ form {
     align-items: center;
     gap: 12px;
 }
-
-.lang-col {
-    flex: 1;
+.lang-row {
     display: flex;
     justify-content: center;
+    align-items: center;
+}
+
+button {
+    margin: 15px;
 }
 
 #content {
     font-size: 2rem;
+    width: 90%;
+    margin: 0 auto;
+    text-align: center;
 }
 
 #rule {
     font-size: 1.2rem;
+    width: 60%;
+    margin: 0 auto;
+    text-align: center;
 }
 
 @media (max-width: 1024px) {
