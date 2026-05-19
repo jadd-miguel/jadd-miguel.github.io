@@ -129,7 +129,6 @@ function fill_agg(agg, start, end) {
             filled.push({key: chk_date, sum: last_val})
         }
     }
-    console.log(filled)
     return filled
 }
 

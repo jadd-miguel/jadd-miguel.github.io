@@ -12,7 +12,11 @@ async function permissions() {
         document.querySelector('.title').innerHTML  = "Schedule <i>As Privileged User</i>"
     } else {
         document.querySelector('.title').innerHTML  = "Schedule <i>As Demo User</i>"
-        document.querySelectorAll('input, button').forEach(el => el.disabled = true)
+            document.querySelectorAll('input, button').forEach(el => {
+            if (!el.closest("#calendar")) {
+                el.disabled = true
+            }
+        })
     }
 }
 
