@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', async function() {
+    const isMobile = window.innerWidth <= 768;
+    if(isMobile) return
+
     const { data, _ } = await CLIENT.auth.getSession()
     const session = data.session
 

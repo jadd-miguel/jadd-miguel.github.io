@@ -100,12 +100,14 @@ async function handleEventUpdate() {
 }
 
 async function handleEventListDraw(event, color) {
+        if(event.done) return
+
         const span = document.createElement("span")
         span.textContent = event.print()
 
         const fill_btn = document.createElement("button")
         fill_btn.textContent = "FILL-FORM"
-        fill_btn.onclick = () => { 
+        fill_btn.onclick = () => {
             fill_form(event)
             fill_btn.classList.add("active");
         }
