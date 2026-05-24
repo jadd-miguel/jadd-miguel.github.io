@@ -9,8 +9,60 @@ document.addEventListener('DOMContentLoaded', async function() {
         document.querySelector('.title').innerHTML  = "Budget <i>As Privileged User</i>"
     } else {
         document.querySelector('.title').innerHTML  = "Budget <i>As Demo User</i>";
-        ["folderInput", "toRun", "toDemo", "start-range", "end-range"].forEach(id => document.getElementById(id).disabled = true)
+        ["folderInput", "toRun", "toDemo"].forEach(id => document.getElementById(id).disabled = true)
     }
+    wide_range()
+    createMonthSelect()
+    run_demo()
+})
+
+const start_form = document.getElementById("start-range")
+const end_form = document.getElementById("end-range")
+
+const month_select = document.getElementById("select_months")
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
+const year_form = document.createElement("select")
+const currentYear = new Date().getFullYear()
+
+function createMonthSelect() {
+
+    for (let year = currentYear - 1; year <= currentYear + 1; year++) {
+
+        const year_option = document.createElement("option");
+        year_option.value = year;
+        year_option.textContent = year;
+
+        if (year === currentYear) year_option.selected = true;
+        year_form.appendChild(year_option);
+    }
+    month_select.appendChild(year_form)
+
+    MONTHS.forEach((m, i) => {
+        const m_btn = document.createElement("button")
+        m_btn.textContent = m
+        m_btn.onclick = (e) => {
+            e.preventDefault()
+            start_form.value = new Date(year_form.value, i+1, 1).toISOString().split("T")[0]
+            end_form.value = new Date(year_form.value, i+2, 0).toISOString().split("T")[0]
+            update_plot(module_df)
+        }
+        month_select.appendChild(m_btn)
+    })
+}
+
+start_form.addEventListener("change", () => {
+    update_plot(module_df)
+})
+end_form.addEventListener("change", () => {
+    update_plot(module_df)
+})
+document.getElementById("date-reset").addEventListener("click", async () => {
+    wide_range()
+    update_plot(module_df)
+    year_form.value = currentYear
+})
+
+function wide_range() {
     const today = new Date()
 
     const past_eight_m = new Date(today);
@@ -19,10 +71,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     const forward_eight_m = new Date(today);
     forward_eight_m.setMonth(today.getMonth() + 8);
 
-    document.getElementById("start-range").value = past_eight_m.toISOString().split("T")[0]
-    document.getElementById("end-range").value = forward_eight_m.toISOString().split("T")[0]
-    run_demo()
-})
+    start_form.value = past_eight_m.toISOString().split("T")[0]
+    end_form.value = forward_eight_m.toISOString().split("T")[0]
+}
 
 let files = []
 let module_df = null
@@ -31,11 +82,15 @@ document.getElementById("folderInput").addEventListener("change", (e) => {
 })
 
 document.getElementById("toRun").addEventListener("click", async () => {
+    byDayBtn.classList.add("active")
+    byMonthBtn.classList.remove("active")
     module_df = await files_to_df(files);
     update_plot(module_df)
 })
 
 document.getElementById("toDemo").addEventListener("click", async () => {
+    byDayBtn.classList.add("active")
+    byMonthBtn.classList.remove("active")
     await run_demo()
 })
 
@@ -45,12 +100,19 @@ const byMonthBtn = document.getElementById("byMonth")
 byDayBtn.addEventListener("click", () => {
     byDayBtn.classList.add("active")
     byMonthBtn.classList.remove("active")
+    month_select.querySelectorAll("button, select").forEach(el => {
+        el.disabled = false
+    })
     update_plot(module_df)
 })
 
 byMonthBtn.addEventListener("click", () => {
     byMonthBtn.classList.add("active")
     byDayBtn.classList.remove("active")
+    month_select.querySelectorAll("button, select").forEach(el => {
+        el.disabled = true
+    })
+    wide_range()
     update_plot(module_df)
 })
 

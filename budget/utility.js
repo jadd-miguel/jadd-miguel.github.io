@@ -78,7 +78,7 @@ function group_by(df, agg_value, x_options) {
                 break
 
             case X_OPTIONS.BY_MONTH:
-                key = row.date.slice(0, 7)
+                key = row.date.slice(0, 7) + "-01"
                 break
             case X_OPTIONS.BY_CATEGORY:
                 key = row.title
@@ -149,10 +149,18 @@ function linearRegression(agg) {
     return { slope, intercept }
 }
 
-function toDayNumber(str) {
-    const y = +str.slice(0, 4)
-    const m = +str.slice(5, 7)
-    const d = +str.slice(8, 10)
+function createTrendLine(start, end, slope, intercept) {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
 
-    return Date.UTC(y, m - 1, d) / 86400000
+    let trend = []
+    for(let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+
+        const daysPast = (d - startDate) / 86400000
+        trend.push({
+            x: new Date(d).toISOString().split("T")[0],
+            y: slope * daysPast + intercept
+        })
+    }
+    return trend
 }
