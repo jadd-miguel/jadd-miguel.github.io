@@ -42,8 +42,8 @@ function createMonthSelect() {
         m_btn.textContent = m
         m_btn.onclick = (e) => {
             e.preventDefault()
-            start_form.value = new Date(year_form.value, i+1, 1).toISOString().split("T")[0]
-            end_form.value = new Date(year_form.value, i+2, 0).toISOString().split("T")[0]
+            start_form.value = new Date(year_form.value, i, 1).toISOString().split("T")[0]
+            end_form.value = new Date(year_form.value, i+1, 0).toISOString().split("T")[0]
             update_plot(module_df)
         }
         month_select.appendChild(m_btn)
@@ -69,7 +69,7 @@ function wide_range() {
     past_eight_m.setMonth(today.getMonth() - 8);
 
     const forward_eight_m = new Date(today);
-    forward_eight_m.setMonth(today.getMonth() + 8);
+    forward_eight_m.setMonth(today.getMonth() + 1);
 
     start_form.value = past_eight_m.toISOString().split("T")[0]
     end_form.value = forward_eight_m.toISOString().split("T")[0]
@@ -81,14 +81,16 @@ document.getElementById("folderInput").addEventListener("change", (e) => {
     files = e.target.files
 })
 
-document.getElementById("toRun").addEventListener("click", async () => {
+document.getElementById("toRun").addEventListener("click", async (e) => {
+    e.preventDefault()
     byDayBtn.classList.add("active")
     byMonthBtn.classList.remove("active")
     module_df = await files_to_df(files);
     update_plot(module_df)
 })
 
-document.getElementById("toDemo").addEventListener("click", async () => {
+document.getElementById("toDemo").addEventListener("click", async (e) => {
+    e.preventDefault()
     byDayBtn.classList.add("active")
     byMonthBtn.classList.remove("active")
     await run_demo()

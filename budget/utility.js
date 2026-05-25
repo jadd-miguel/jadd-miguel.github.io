@@ -36,11 +36,11 @@ const DISCARD = ["INITIAL"]
 function get_df(raw_logs) {
     let df = [];
     let logs = [];
-    let total = 0;
+    let amount = 0;
 
     for (const raw_log of raw_logs) {
-        if (raw_log[1] === "INITIAL") {
-            total = Number(raw_log[4]);
+        if (raw_log[1] ===  "INITIAL") {
+            amount = Number(raw_log[4])
         }
         if (!DISCARD.includes(raw_log[1])) {
             logs.push(raw_log);
@@ -51,14 +51,19 @@ function get_df(raw_logs) {
     logs.sort((a, b) => new Date(a[0]) - new Date(b[0]))
 
     for (const log of logs) {
-        let date = log[0]
+        let date = new Date(
+            log[0]
+                .replace(/\//g, "-")
+                .replace(/"/g, "")
+        ).toISOString().split("T")[0]
+        
         let title = log[1].replace(/\s+/g, " ")
 
-        let deduct = log[2] === "" ? 0 : Number(log[2])
-        let credit = log[3] === "" ? 0 : Number(log[3])
+        let deduct = log[2] === "" ? 0 : round(Number(log[2].replace(/"/g, "")))
+        let credit = log[3] === "" ? 0 : round(Number(log[3].replace(/"/g, "")))
         let net = credit - deduct
 
-        amount = total + net
+        amount = round(amount + net)
         df.push(new Transaction(date, title, deduct, credit, amount, net))
     }
     return df
@@ -84,6 +89,8 @@ function group_by(df, agg_value, x_options) {
                 key = row.title
                 break
         }
+        if(x_options == X_OPTIONS.BY_CATEGORY & row.title.includes("TFR"))
+            break
 
         let value = ""
         switch (agg_value) {
@@ -163,4 +170,9 @@ function createTrendLine(start, end, slope, intercept) {
         })
     }
     return trend
+}
+
+function round(num) {
+    num = Number(num.toFixed(2))
+    return Math.round(num * 100) / 100
 }

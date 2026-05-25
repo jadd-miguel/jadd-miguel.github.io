@@ -34,9 +34,10 @@ function drawTrend(df, x_option, date_range) {
     const { slope, intercept } = linearRegression(filled_agg)
 
     if(x_option == X_OPTIONS.BY_DAY) {
-        document.getElementById("slope").innerText = "Rate: $" + (Math.round(slope * 100) / 100) + "/day"
-        const daysTillNoFunds = (Math.round((intercept / slope  * -1) * 100) / 100)
-        document.getElementById("zero").innerText = daysTillNoFunds < 0 ? "Stable Trend" : "Day of Until No Funds " + daysTillNoFunds
+        document.getElementById("slope").innerText = "Rate: $" + round(slope) + "/day"
+        const daysTillNoFunds = round(intercept / slope  * -1)
+        document.getElementById("zero").innerText = daysTillNoFunds < 0 ? "Stable Trend" : "Until No Funds: " + daysTillNoFunds + " Days"
+        document.getElementById("worth").innerText = "Worth: $" + round(amount_agg.at(-1).sum)
     }
 
     const trendLine = createTrendLine(startKey, "2045-01-01", slope, intercept).filter(d => d.x >= date_range.start && d.x <= date_range.end)
