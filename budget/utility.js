@@ -59,11 +59,11 @@ function get_df(raw_logs) {
         
         let title = log[1].replace(/\s+/g, " ")
 
-        let deduct = log[2] === "" ? 0 : round(Number(log[2].replace(/"/g, "")))
-        let credit = log[3] === "" ? 0 : round(Number(log[3].replace(/"/g, "")))
+        let deduct = log[2] === "" ? 0 : Number(log[2].replace(/"/g, ""))
+        let credit = log[3] === "" ? 0 : Number(log[3].replace(/"/g, ""))
         let net = credit - deduct
 
-        amount = round(amount + net)
+        amount = amount + net
         df.push(new Transaction(date, title, deduct, credit, amount, net))
     }
     return df
@@ -173,6 +173,5 @@ function createTrendLine(start, end, slope, intercept) {
 }
 
 function round(num) {
-    num = Number(num.toFixed(2))
     return Math.round(num * 100) / 100
 }

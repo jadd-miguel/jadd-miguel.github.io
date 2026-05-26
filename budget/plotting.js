@@ -33,21 +33,23 @@ function drawTrend(df, x_option, date_range) {
     const filled_agg = fill_agg(amount_agg, startKey, endKey)
     const { slope, intercept } = linearRegression(filled_agg)
 
+    let points = []
     if(x_option == X_OPTIONS.BY_DAY) {
         document.getElementById("slope").innerText = "Rate: $" + round(slope) + "/day"
         const daysTillNoFunds = round(intercept / slope  * -1)
         document.getElementById("zero").innerText = daysTillNoFunds < 0 ? "Stable Trend" : "Until No Funds: " + daysTillNoFunds + " Days"
         document.getElementById("worth").innerText = "Worth: $" + round(amount_agg.at(-1).sum)
-    }
 
-    const trendLine = createTrendLine(startKey, "2045-01-01", slope, intercept).filter(d => d.x >= date_range.start && d.x <= date_range.end)
-    const trend = {
-        x: trendLine.map(z => z.x),
-        y: trendLine.map(z => z.y),
-        mode: "lines",
-        name: "Trend"
+        const trendLine = createTrendLine(startKey, "2045-01-01", slope, intercept)
+            .filter(d => d.x >= date_range.start && d.x <= date_range.end)
+        const trend = {
+            x: trendLine.map(z => z.x),
+            y: trendLine.map(z => z.y),
+            mode: "lines",
+            name: "Trend"
+        }
+        points.push(trend)
     }
-
     amount_agg = amount_agg.filter(d => d.key >= date_range.start && d.key <= date_range.end)
     const total = {
         x: amount_agg.map(row => row.key),
@@ -55,12 +57,13 @@ function drawTrend(df, x_option, date_range) {
         mode: "lines+markers",
         name: "Total"
     }
+    points.push(total)
     const layout = {
         title: { text: "Holdings Trend" },
         xaxis: { title: { text: x_option} },
         yaxis: { title: { text: "Amount Holding ($)"} }
     }
-    Plotly.newPlot("trend", [total, trend], layout)
+    Plotly.newPlot("trend", points, layout)
 }
 
 function drawNet(df, agg_value, x_option, date_range) {
