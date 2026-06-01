@@ -32,7 +32,7 @@ class Transaction {
     }
 }
 
-const DISCARD = ["INITIAL"]
+const LOG_DISCARD = ["INITIAL"]
 function get_df(raw_logs) {
     let df = [];
     let logs = [];
@@ -42,7 +42,7 @@ function get_df(raw_logs) {
         if (raw_log[1] ===  "INITIAL") {
             amount = Number(raw_log[4])
         }
-        if (!DISCARD.includes(raw_log[1])) {
+        if (!LOG_DISCARD.includes(raw_log[1])) {
             logs.push(raw_log);
         }
     }
@@ -69,6 +69,7 @@ function get_df(raw_logs) {
     return df
 }
 
+const CATEGORY_DISCARD = ["TFR", "THANK YOU"]
 const AGG_VALUES = {NET: "Net", AMOUNT: "Amount", DEDUCT: "Deduct", CREDIT: "Credit"}
 const X_OPTIONS = { BY_DAY: "Days", BY_MONTH: "Months", BY_CATEGORY: "Categories" }
 function group_by(df, agg_value, x_options) {
@@ -89,9 +90,9 @@ function group_by(df, agg_value, x_options) {
                 key = row.title
                 break
         }
-        if(x_options == X_OPTIONS.BY_CATEGORY & row.title.includes("TFR"))
-            break
-
+        if(x_options == X_OPTIONS.BY_CATEGORY & CATEGORY_DISCARD.some(w => key.includes(w)))
+            continue
+  
         let value = ""
         switch (agg_value) {
             case AGG_VALUES.AMOUNT:

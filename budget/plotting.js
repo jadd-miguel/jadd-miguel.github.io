@@ -36,8 +36,12 @@ function drawTrend(df, x_option, date_range) {
     let points = []
     if(x_option == X_OPTIONS.BY_DAY) {
         document.getElementById("slope").innerText = "Rate: $" + round(slope) + "/day"
+
         const daysTillNoFunds = round(intercept / slope  * -1)
-        document.getElementById("zero").innerText = daysTillNoFunds < 0 ? "Stable Trend" : "Until No Funds: " + daysTillNoFunds + " Days"
+        let funds_date = new Date();
+        funds_date.setDate(funds_date.getDate() + daysTillNoFunds)
+        
+        document.getElementById("zero").innerText = daysTillNoFunds < 0 ? "Upward Trend" : "Until No Funds: " + funds_date.toISOString().split("T")[0]
         document.getElementById("worth").innerText = "Worth: $" + round(amount_agg.at(-1).sum)
 
         const trendLine = createTrendLine(startKey, "2045-01-01", slope, intercept)
