@@ -1,5 +1,5 @@
-const SERVER_URL = "https://aezewrnpboaixgjbvyoc.supabase.co"
-const ANON_KEY = "sb_publishable_IcZSnNPX54lkgnTqQMAZ8g_OTxa2V-T"
+const SERVER_URL = "https://ugxwfxnfuwswmojuaagt.supabase.co"
+const ANON_KEY = "sb_publishable_aWNpR_9LhqbLuCtc-95zsw_TKSeJBQA"
 
 const CLIENT = supabase.createClient(SERVER_URL, ANON_KEY, {auth: {
     persistSession: true,
