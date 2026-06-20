@@ -26,7 +26,30 @@ const currentYear = new Date().getFullYear()
 
 function createMonthSelect() {
 
-    for (let year = currentYear - 1; year <= currentYear + 1; year++) {
+    MONTHS.forEach((m, i) => {
+        const m_btn = document.createElement("button")
+        m_btn.textContent = m
+        m_btn.onclick = (e) => {
+            e.preventDefault()
+
+            if(m_btn.classList.contains('active')) {
+                Array.from(month_select.children).forEach(x => x.classList.remove('active'))
+                wide_range()
+                update_plot(module_df)
+            }
+            else {
+                start_form.value = new Date(year_form.value, i, 1).toISOString().split("T")[0]
+                end_form.value = new Date(year_form.value, i+1, 0).toISOString().split("T")[0]
+                update_plot(module_df)
+
+                Array.from(month_select.children).forEach(x => x.classList.remove('active'))
+                m_btn.classList.add('active')
+            }
+        }
+        month_select.appendChild(m_btn)
+    })
+
+    for (let year = currentYear - 4; year <= currentYear + 4; year++) {
 
         const year_option = document.createElement("option");
         year_option.value = year;
@@ -36,18 +59,6 @@ function createMonthSelect() {
         year_form.appendChild(year_option);
     }
     month_select.appendChild(year_form)
-
-    MONTHS.forEach((m, i) => {
-        const m_btn = document.createElement("button")
-        m_btn.textContent = m
-        m_btn.onclick = (e) => {
-            e.preventDefault()
-            start_form.value = new Date(year_form.value, i, 1).toISOString().split("T")[0]
-            end_form.value = new Date(year_form.value, i+1, 0).toISOString().split("T")[0]
-            update_plot(module_df)
-        }
-        month_select.appendChild(m_btn)
-    })
 }
 
 start_form.addEventListener("change", () => {
@@ -60,6 +71,8 @@ document.getElementById("date-reset").addEventListener("click", async () => {
     wide_range()
     update_plot(module_df)
     year_form.value = currentYear
+    chartOptionDefault()
+    Array.from(month_select.children).forEach(x => x.classList.remove('active'))
 })
 
 function wide_range() {
@@ -122,11 +135,15 @@ const byNetBtn = document.getElementById("byNet")
 const byDeductBtn = document.getElementById("byDeduct")
 const byCreditBtn = document.getElementById("byCredit")
 
-byNetBtn.addEventListener("click", () => {
+function chartOptionDefault() {
     byNetBtn.classList.add("active")
     byDeductBtn.classList.remove("active")
     byCreditBtn.classList.remove("active")
     update_plot(module_df)
+}
+
+byNetBtn.addEventListener("click", () => {
+    chartOptionDefault()
 })
 
 byDeductBtn.addEventListener("click", () => {

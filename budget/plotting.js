@@ -35,14 +35,18 @@ function drawTrend(df, x_option, date_range) {
 
     let points = []
     if(x_option == X_OPTIONS.BY_DAY) {
-        document.getElementById("slope").innerText = "Rate: $" + round(slope) + "/day"
+        document.getElementById("slope").innerText = "Rate: $" + round(slope).toLocaleString() + "/day"
 
         const daysTillNoFunds = round(intercept / slope  * -1)
         let funds_date = new Date();
         funds_date.setDate(funds_date.getDate() + daysTillNoFunds)
+
+        const today = new Date()
+        const dayDiff = Math.floor((funds_date - today) / (1000 * 60 * 60 * 24))
         
-        document.getElementById("zero").innerText = daysTillNoFunds < 0 ? "Upward Trend" : "Until No Funds: " + funds_date.toISOString().split("T")[0]
-        document.getElementById("worth").innerText = "Worth: $" + round(amount_agg.at(-1).sum)
+        document.getElementById("zero").innerText
+            = daysTillNoFunds < 0 ? "Upward Trend" : "'Til Zero: " + dayDiff.toLocaleString() + "days/" + funds_date.toISOString().split("T")[0]
+        document.getElementById("worth").innerText = "Worth: $" + round(amount_agg.at(-1).sum).toLocaleString()
 
         const trendLine = createTrendLine(startKey, "2045-01-01", slope, intercept)
             .filter(d => d.x >= date_range.start && d.x <= date_range.end)
@@ -97,9 +101,9 @@ function drawCat(df, date_range) {
         marker: { color: agg.map(d => d.sum).map(v => v >= 0 ? "green" : "red") }
     }    
     const layout = {
-        title: { text: "Category Expenses" },
+        title: { text: "Category Transactions" },
         xaxis: { title: { text: "Categories"} },
-        yaxis: { title: { text: "Amount Spent ($)"} }
+        yaxis: { title: { text: "Total Amount ($)"} }
     }
     Plotly.newPlot("category", [agg_line], layout)
 }
