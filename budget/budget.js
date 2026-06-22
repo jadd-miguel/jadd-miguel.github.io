@@ -160,9 +160,14 @@ byCreditBtn.addEventListener("click", () => {
     update_plot(module_df)
 })
 
+let category_blueprint = null
 async function run_demo() {
-    const response = await fetchFile("demo_budget.csv")
-    module_df = await files_to_df([response])
+    if(category_blueprint == null) {
+        const res = await fetchFile("categories2.json")
+        category_blueprint = JSON.parse(await res.text());
+    }
+    const res = await fetchFile("demo_budget.csv")
+    module_df = await files_to_df([res])
     update_plot(module_df)
 }
 

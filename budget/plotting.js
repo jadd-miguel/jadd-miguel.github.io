@@ -35,37 +35,21 @@ function drawTrend(df, x_option, date_range) {
 
     let points = []
     if(x_option == X_OPTIONS.BY_DAY) {
-        document.getElementById("slope").innerText = "Rate: $" + round(slope).toLocaleString() + "/day"
-
-        const daysTillNoFunds = round(intercept / slope  * -1)
-        let funds_date = new Date();
-        funds_date.setDate(funds_date.getDate() + daysTillNoFunds)
-
-        const today = new Date()
-        const dayDiff = Math.floor((funds_date - today) / (1000 * 60 * 60 * 24))
-        
-        document.getElementById("zero").innerText
-            = daysTillNoFunds < 0 ? "Upward Trend" : "'Til Zero: " + dayDiff.toLocaleString() + "days/" + funds_date.toISOString().split("T")[0]
-        document.getElementById("worth").innerText = "Worth: $" + round(amount_agg.at(-1).sum).toLocaleString()
+        writeDashboard(slope, intercept, amount_agg)
 
         const trendLine = createTrendLine(startKey, "2045-01-01", slope, intercept)
             .filter(d => d.x >= date_range.start && d.x <= date_range.end)
-        const trend = {
+        points.push({
             x: trendLine.map(z => z.x),
             y: trendLine.map(z => z.y),
             mode: "lines",
             name: "Trend"
-        }
-        points.push(trend)
+        })
     }
     amount_agg = amount_agg.filter(d => d.key >= date_range.start && d.key <= date_range.end)
-    const total = {
-        x: amount_agg.map(row => row.key),
-        y: amount_agg.map(row => row.sum),
-        mode: "lines+markers",
-        name: "Total"
-    }
-    points.push(total)
+    points.push(
+        createChartObject(amount_agg, "lines+markers", "Total", "orange")
+    )
     const layout = {
         title: { text: "Holdings Trend" },
         xaxis: { title: { text: x_option} },
@@ -77,33 +61,70 @@ function drawTrend(df, x_option, date_range) {
 function drawNet(df, agg_value, x_option, date_range) {
     let agg = group_by(df, agg_value, x_option)
     agg = agg.filter(d => d.key >= date_range.start && d.key <= date_range.end)
-    const agg_line = {
-        x: agg.map(d => d.key),
-        y: agg.map(d => d.sum),
-        type: "bar",
-        marker: { color: agg.map(d => d.sum).map(v => v >= 0 ? "green" : "red") }
-    }
+    
+    const [positive, negative] = splitAggPolarity(agg)
+
+    const pos_line = createChartObject(positive, "bar", "Profit", "green")
+    const neg_line = createChartObject(negative, "bar", "Deficit", "red")
+
     const layout = {
         title: { text: agg_value + " Per " + x_option},
         xaxis: { title: { text: x_option} },
-        yaxis: { title: { text: agg_value + " ($)"} }
+        yaxis: { type: "log", title: { text: agg_value + " ($)"} }
     }
-    Plotly.newPlot("data_net", [agg_line], layout)
+    Plotly.newPlot("data_net", [pos_line, neg_line], layout)
 }
 
 function drawCat(df, date_range) {
     df = df.filter(x => x.date >= date_range.start && x.date <= date_range.end)
     const agg = group_by(df, AGG_VALUES.NET, X_OPTIONS.BY_CATEGORY)
-    const agg_line = {
-        x: agg.map(d => d.key),
-        y: agg.map(d => d.sum),
-        type: "bar",
-        marker: { color: agg.map(d => d.sum).map(v => v >= 0 ? "green" : "red") }
-    }    
+    const sorted_agg = agg.sort((a, b) => Math.abs(b.sum) - Math.abs(a.sum))
+    const [positive, negative] = splitAggPolarity(sorted_agg)
+
+    const pos_line = createChartObject(positive, "bar", "Income", "green")
+    const neg_line = createChartObject(negative, "bar", "Expenses", "red")
+    
     const layout = {
         title: { text: "Category Transactions" },
         xaxis: { title: { text: "Categories"} },
-        yaxis: { title: { text: "Total Amount ($)"} }
+        yaxis: { type: "log", title: { text: "Total Amount ($)"} }
     }
-    Plotly.newPlot("category", [agg_line], layout)
+    Plotly.newPlot("category", [pos_line, neg_line], layout)
+}
+
+function createChartObject(data, type, name, color) {
+    return {
+        x: data.map(d => d.key),
+        y: data.map(d => d.sum),
+        type: type,
+        name: name,
+        marker: { color: color }
+    }
+}
+
+function writeDashboard(slope, intercept, amount_agg) {
+    document.getElementById("slope").innerText = "Rate: $" + round(slope).toLocaleString() + "/day"
+
+    const daysTillNoFunds = round(intercept / slope  * -1)
+    let funds_date = new Date();
+    funds_date.setDate(funds_date.getDate() + daysTillNoFunds)
+
+    const today = new Date()
+    const dayDiff = Math.floor((funds_date - today) / (1000 * 60 * 60 * 24))
+        
+    document.getElementById("zero").innerText
+        = daysTillNoFunds < 0 ? "Upward Trend" : "'Til Zero: " + dayDiff.toLocaleString() + "days/" + funds_date.toISOString().split("T")[0]
+    document.getElementById("worth").innerText = "Worth: $" + round(amount_agg.at(-1).sum).toLocaleString()
+}
+
+function splitAggPolarity(agg) {
+    let positive = agg.filter(d => d.sum >= 0);
+    let negative = agg.filter(d => d.sum < 0);
+
+    negative = negative.map(x => ({
+        key: x.key,
+        sum: Math.abs(x.sum)
+    }))
+
+    return [positive, negative]
 }

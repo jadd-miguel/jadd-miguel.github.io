@@ -69,12 +69,12 @@ function get_df(raw_logs) {
     return df
 }
 
-const CATEGORY_DISCARD = ["TFR", "THANK YOU"]
+const CATEGORY_DISCARD = ["TFR", "THANK YOU", "PLACEHOLDER"]
 const AGG_VALUES = {NET: "Net", AMOUNT: "Amount", DEDUCT: "Deduct", CREDIT: "Credit"}
 const X_OPTIONS = { BY_DAY: "Days", BY_MONTH: "Months", BY_CATEGORY: "Categories" }
 function group_by(df, agg_value, x_options) {
 
-    let dates = {}
+    let collect = {}
     for (const row of df) {
 
         let key = ""
@@ -87,12 +87,12 @@ function group_by(df, agg_value, x_options) {
                 key = row.date.slice(0, 7) + "-01"
                 break
             case X_OPTIONS.BY_CATEGORY:
-                key = row.title
+                key = getCategoryByMerchant(row.title)
                 break
         }
         if(x_options == X_OPTIONS.BY_CATEGORY & CATEGORY_DISCARD.some(w => key.includes(w)))
             continue
-  
+
         let value = ""
         switch (agg_value) {
             case AGG_VALUES.AMOUNT:
@@ -108,12 +108,12 @@ function group_by(df, agg_value, x_options) {
                 value = row.credit
                 break
         }
-        if (!dates[key]) {
-            dates[key] = []
+        if (!collect[key]) {
+            collect[key] = []
         }     
-        dates[key].push(value)
+        collect[key].push(value)
     }
-    const agg = Object.entries(dates)
+    const agg = Object.entries(collect)
         .map(([key, values]) => ({
             key,
             sum: agg_value == AGG_VALUES.AMOUNT ? 
@@ -175,4 +175,18 @@ function createTrendLine(start, end, slope, intercept) {
 
 function round(num) {
     return Math.round(num * 100) / 100
+}
+
+function getCategoryByMerchant(merchant) {
+    const merchant_norm = merchant.trim().toUpperCase()
+
+    for (const [category, merchants] of Object.entries(category_blueprint)) {
+        for (const m of merchants) {
+            
+            if (merchant_norm === m.trim().toUpperCase())
+                return category
+
+        }
+    }
+    return merchant
 }
