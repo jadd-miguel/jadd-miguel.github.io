@@ -73,9 +73,13 @@ const CATEGORY_DISCARD = ["TFR", "THANK YOU", "PLACEHOLDER"]
 const AGG_VALUES = {NET: "Net", AMOUNT: "Amount", DEDUCT: "Deduct", CREDIT: "Credit"}
 const X_OPTIONS = { BY_DAY: "Days", BY_MONTH: "Months", BY_CATEGORY: "Categories" }
 function group_by(df, agg_value, x_options) {
-
     let collect = {}
     for (const row of df) {
+
+        if(x_options == X_OPTIONS.BY_CATEGORY & CATEGORY_DISCARD.some(w => row.title.includes(w)))
+            continue
+        if(x_options != X_OPTIONS.BY_CATEGORY & agg_value != AGG_VALUES.AMOUNT & CATEGORY_DISCARD.some(w => row.title.includes(w)))
+            continue
 
         let key = ""
         switch (x_options) {
@@ -90,9 +94,6 @@ function group_by(df, agg_value, x_options) {
                 key = getCategoryByMerchant(row.title)
                 break
         }
-        if(x_options == X_OPTIONS.BY_CATEGORY & CATEGORY_DISCARD.some(w => key.includes(w)))
-            continue
-
         let value = ""
         switch (agg_value) {
             case AGG_VALUES.AMOUNT:

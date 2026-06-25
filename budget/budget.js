@@ -69,10 +69,10 @@ end_form.addEventListener("change", () => {
 })
 document.getElementById("date-reset").addEventListener("click", async () => {
     wide_range()
-    update_plot(module_df)
     year_form.value = currentYear
+    byTimeDefault()
     chartOptionDefault()
-    Array.from(month_select.children).forEach(x => x.classList.remove('active'))
+
 })
 
 function wide_range() {
@@ -112,12 +112,17 @@ document.getElementById("toDemo").addEventListener("click", async (e) => {
 const byDayBtn = document.getElementById("byDay")
 const byMonthBtn = document.getElementById("byMonth")
 
-byDayBtn.addEventListener("click", () => {
+function byTimeDefault() {
     byDayBtn.classList.add("active")
     byMonthBtn.classList.remove("active")
     month_select.querySelectorAll("button, select").forEach(el => {
         el.disabled = false
     })
+    Array.from(month_select.children).forEach(x => x.classList.remove('active'))
+}
+
+byDayBtn.addEventListener("click", () => {
+    byTimeDefault()
     update_plot(module_df)
 })
 
@@ -127,6 +132,7 @@ byMonthBtn.addEventListener("click", () => {
     month_select.querySelectorAll("button, select").forEach(el => {
         el.disabled = true
     })
+    Array.from(month_select.children).forEach(x => x.classList.remove('active'))
     wide_range()
     update_plot(module_df)
 })
@@ -163,7 +169,7 @@ byCreditBtn.addEventListener("click", () => {
 let category_blueprint = null
 async function run_demo() {
     if(category_blueprint == null) {
-        const res = await fetchFile("categories2.json")
+        const res = await fetchFile("categories4.json")
         category_blueprint = JSON.parse(await res.text());
     }
     const res = await fetchFile("demo_budget.csv")

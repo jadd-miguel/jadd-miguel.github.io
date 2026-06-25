@@ -1,3 +1,6 @@
+const grabLangRulesBtn = document.getElementById('grabLangRules')
+const ruleAndPointsBtn = document.getElementById('ruleAndPoints')
+
 document.addEventListener('DOMContentLoaded', async function() {
     const { data, _ } = await CLIENT.auth.getSession()
     const session = data.session
@@ -6,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         document.querySelector('.title').innerHTML  = "Lang-A-Day <i>As Privileged User</i>"
     } else {
         document.querySelector('.title').innerHTML  = "Lang-A-Day <i>As Demo User</i>"
-        document.getElementById('ruleAndPoints').disabled = true
+        ruleAndPoints.disabled = true
     }
 })
 
@@ -21,13 +24,28 @@ class Rule {
     }
 }
 
+function disableBtns(){
+    grabLangRulesBtn.disabled = true
+    ruleAndPointsBtn.disabled = true
+}
+
+function enableBtns(){
+    grabLangRulesBtn.disabled = false
+    ruleAndPointsBtn.disabled = false
+}
+
+
 async function grabLangRules() {
+    disableBtns()
     await handleRule()
+    enableBtns()
 }
 
 async function ruleAndPoints() {
+    disableBtns()
     await handlePoints(active_rule)
     await handleRule()
+    enableBtns()
 }
 
 async function handleRule() {
