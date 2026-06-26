@@ -7,10 +7,15 @@
 }
 
 .center-list a {
-    text-transform: uppercase;
     display: block;
     text-align: center;
     letter-spacing: 1px;
     font-size: 1.4rem;
     font-weight: 500;
+}
+
+.mbl-login input {
+    display: block;
+    margin: 4px auto;
+    padding: 3px;
 }

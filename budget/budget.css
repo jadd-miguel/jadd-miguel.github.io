@@ -11,6 +11,11 @@ form {
     gap: 10px;
     align-items: center;
     margin-top: auto;
+
+}
+
+#options {
+    width: 74%;
 }
 
 #options, #select_months {

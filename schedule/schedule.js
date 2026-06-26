@@ -9,9 +9,9 @@ async function permissions() {
     const session = data.session
 
     if(session) {
-        document.querySelector('.title').innerHTML  = "Schedule <i>As Privileged User</i>"
+        document.querySelector('.title').innerHTML  = "Schedule (Authenticated)"
     } else {
-        document.querySelector('.title').innerHTML  = "Schedule <i>As Demo User</i>"
+        document.querySelector('.title').innerHTML  = "Schedule (Unathenticated)"
             document.querySelectorAll('input, button').forEach(el => {
             if (!el.closest("#calendar")) {
                 el.disabled = true

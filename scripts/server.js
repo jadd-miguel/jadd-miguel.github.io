@@ -9,8 +9,8 @@ const CLIENT = supabase.createClient(SERVER_URL, ANON_KEY, {auth: {
 const FILE_STORAGE = "my site"
 
 async function login() {
-    const email = document.getElementById("email").value
-    const password = document.getElementById("password").value
+    const email = document.getElementById(window.innerWidth > 1024 ? "email" : "mbl-email").value
+    const password = document.getElementById(window.innerWidth > 1024 ? "email" : "mbl-password").value
 
     document.getElementById("email").value = ""
     document.getElementById("password").value = ""
@@ -23,9 +23,8 @@ async function login() {
         show_snackbar("Login Error: " + error.message)
     } else {
         show_snackbar("Login Success")
-        document.querySelector('.title').innerHTML  = "Home <i>As Privileged User</i>"
-        document.querySelector(".login").style.display = 'none'
-        document.querySelector(".logout").style.display = 'block'
+        document.querySelectorAll(".login, .mbl-login").forEach(x => { x.style.display = 'none' })
+        document.querySelectorAll(".logout, .mbl-logout").forEach(x => { x.style.display = 'block' })
     }
 }
 
@@ -34,9 +33,8 @@ async function logout() {
     if(data.error) {
         show_snackbar("Logout Error: " + data.error)
     } else {
-        document.querySelector('.title').innerHTML  = "Home <i>As Demo User</i>"
-        document.querySelector(".login").style.display = 'block'
-        document.querySelector(".logout").style.display = 'none'
+        document.querySelectorAll(".login, .mbl-login").forEach(x => { x.style.display = 'block' })
+        document.querySelectorAll(".logout, .mbl-logout").forEach(x => { x.style.display = 'none' })
         show_snackbar("Logout Success")
     }
 }
@@ -51,7 +49,7 @@ async function fetchFile(name) {
         show_snackbar("Fetch File Error: " + error.message)
         return
     } else {
-        show_snackbar("Fetch File Success")
+        console.log("Fetch File Success")
     }
     return data
 }

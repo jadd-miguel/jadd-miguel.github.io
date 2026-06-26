@@ -1,31 +1,50 @@
 nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     position: sticky;
     top: 0;
     z-index: 99;
+    background-color: black;
+    padding-top: 12px;
 }
 
-.nav-top {
+.nav-center {
+    flex: 1;
     display: flex;
     justify-content: center;
-    align-items: center;
-    background-color: black;
 }
 
-.nav-top li {
-    padding: 12px;
-}
-
-.nav-top a {
+nav a {
+    margin-right: 8px;
     font-size: 44px;
     padding: 8px;
     border-radius: 10px;
 }
 
-.nav-top a:hover {
+nav a:hover {
     color: black;
     background-color: white;
 }
 
 .title {
     font-size: 1.6rem;
+}
+
+.nav-left {
+    flex: 1;
+    display: flex;
+    justify-content: right;
+}
+
+.login, .logout {
+    flex: 1;
+    justify-content: left;
+}
+
+.login input, button {
+    flex: 1;
+    display: block;
+    padding: 3px;    
+    margin: 3px;    
 }
