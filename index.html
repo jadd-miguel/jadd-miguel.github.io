@@ -17,60 +17,231 @@
     <script src="./scripts/home.js" defer></script>
 </head>
 <body>
-    <nav>
-        <ul class="nav-top">
-            <li>
-                <a class="home-icon" href="./index.html">
+    <nav class="for-desktop">
+        <div class="nav-left">
+            <span>
+                <a href="https://www.linkedin.com/in/jadd-arriola/" target="_blank" rel="noreferrer">
+                    <i class="fa-brands fa-linkedin"></i>
+                </a>    
+            </span>
+            <span>
+                <a href="https://github.com/jadd-miguel" target="_blank" rel="noreferrer">
+                    <i class="fa-brands fa-github"></i>
+                </a>    
+            </span>
+        </div>
+        <div class="nav-center">
+            <span>
+                <a href="./index.html">
                     <i class="fa-solid fa-house"></i>
-                </a>
-            </li>
-            <li class="title"></li>
-        </ul>
+                </a>    
+            </span>
+            <span class="title">Home</span >
+        </div>
+        <div class="login">
+            <input type="email" id="email" placeholder="Email">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="login()">Login</button>
+        </div>
+        <div class="logout">
+            <button onclick="logout()">Logout</button>
+        </div>       
+    </nav>
+    <nav class="for-mobile">
+        <div class="nav-center">
+            <span>
+                <a href="./index.html">
+                    <i class="fa-solid fa-house"></i>
+                </a>    
+            </span>
+            <span class="title">Home</span >
+        </div>
     </nav>
     <div id="snackbar"></div>
-    <div class="center-list">
-        <ul>
-            <li>
+    <div class="for-desktop">
+        <div class="row">
+            <div class="col">
                 <a href="./schedule/schedule.html">
-                    Schedule Module
+                    <div class="app-node">
+                        <h1>Scheduling</h1>
+                        where I schedule everyday tasks to keep organized
+                    </div>
                 </a>
-            </li>
-            <li>
+            </div>
+            <div class="col">
                 <a href="./budget/budget.html">
-                    Budget Module
+                    <div class="app-node">
+                        <h1>Budgeting</h1>
+                        to make sure I don't spend too much, the info presented is for demo
+                    </div>
                 </a>
-            </li>
-            <li>
+            </div>
+            <div class="col">
                 <a href="./lang-a-day/lang-a-day.html">
-                    LANG-A-DAY
+                    <div class="app-node">
+                        <h1>Lang A Day</h1>
+                        to keep consistent with my passion of marveling at the world
+                    </div>
                 </a>
-            </li>
-            <li>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <a href="https://github.com/jadd-miguel/ShouldTire" target="_blank" rel="noreferrer">
+                    <div class="app-node">
+                        <h1>ShouldTire ↗</h1>
+                        (interface soon) with some experience as a technician, a tool that could have helped understand tire wear
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="https://github.com/jadd-miguel/capstone-summer26" target="_blank" rel="noreferrer">
+                    <div class="app-node">
+                        <h1>NaviSkill AI ↗</h1>
+                        (interface soon) an agentic suite of personalised tools designed to optimise dynamic career roadmapping
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="https://github.com/jadd-miguel/will-it-be-a-hit" target="_blank" rel="noreferrer">
+                    <div class="app-node">
+                        <h1>Will Game Be A Hit? ↗</h1>
+                        (interface soon) logistic regression analysis of steam game prices
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <a href="https://papaya-tree.itch.io/the-papaya-tree?secret=o36sgrPmjy0y4Cgk09JzUSumR5U" target="_blank" rel="noreferrer">
+                    <div class="app-node">
+                        <h1>Papaya Tree ↗</h1>
+                        a vertical platformer about a farmer using his unearthly jumping ability to reach the top of the papaya tree
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="https://github.com/jadd-miguel/ai-coursework-2026" target="_blank" rel="noreferrer">
+                    <div class="app-node">
+                        <h1>Coursework ↗</h1>
+                        repo of some work during my postgraduate certificate in artificial intelligence 2026
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="https://github.com/jasonkwan86/flashflow"  target="_blank" rel="noreferrer">
+                    <div class="app-node">
+                        <h1>Flashflow ↗</h1>
+                        repo human compuer interaction project at western university
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
                 <a href="more-about-me.html">
-                    More About Me
+                    <div class="app-node">
+                        <h1>More About Me</h1>
+                    </div>
                 </a>
-            </li>
-            <li><br></li>
-            <li>
-                <a href="https://www.linkedin.com/in/jadd-arriola/" target="_blank" rel="noreferrer">
-                    Linkedin ↗
+            </div>
+            <div class="col">
+                <a href="#">
+                    <div class="app-node">
+                        <h1>...</h1>
+                    </div>
                 </a>
-            </li>
-            <li>
-                <a href="https://github.com/jadd-miguel" target="_blank" rel="noreferrer">
-                    GitHub ↗
+            </div>
+            <div class="col">
+                <a href="#">
+                    <div class="app-node">
+                        <h1>...</h1>
+                    </div>
                 </a>
-            </li>
-            <li><br></li>
-            <li class="login">
-                <input type="email" id="email" placeholder="Email">
-                <input type="password" id="password" placeholder="Password">
-                <button  onclick="login()">Login</button>
-            </li>
-            <li class="logout">
-                <button  onclick="logout()">Logout</button>
-            </li>
-        </ul>
+            </div>
+        </div>
+    </div>
+    <div class="for-mobile">
+        <div class="center-list">
+            <ul>
+                <li>
+                    <a href="./schedule/schedule.html">
+                        Schedule Module
+                    </a>
+                </li>
+                <li>
+                    <a href="./budget/budget.html">
+                        Budget Module
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/jadd-miguel/ShouldTire" target="_blank" rel="noreferrer">
+                        Lang-A-Day
+                    </a>
+                </li>
+                <li><br></li>
+                <li>
+                    <a href="./schedule/schedule.html">
+                        ShouldTire ↗
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/jadd-miguel/capstone-summer26" target="_blank" rel="noreferrer">
+                        NaviSkill AI ↗
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/jadd-miguel/will-it-be-a-hit" target="_blank" rel="noreferrer">
+                        Will Game Be A Hit? ↗
+                    </a>
+                </li>
+                <li><br></li>
+                <li>
+                    <a href="https://papaya-tree.itch.io/the-papaya-tree?secret=o36sgrPmjy0y4Cgk09JzUSumR5U" target="_blank" rel="noreferrer">
+                        Papaya Tree ↗
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/jadd-miguel/ai-coursework-2026" target="_blank" rel="noreferrer">
+                        AI '26 Coursework ↗
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/jasonkwan86/flashflow"  target="_blank" rel="noreferrer">
+                        Flashflow ↗
+                    </a>
+                </li>
+                <li><br></li>
+                <li>
+                    <a href="more-about-me.html">
+                        More About Me
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.linkedin.com/in/jadd-arriola/" target="_blank" rel="noreferrer">
+                        Linkedin ↗
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/jadd-miguel" target="_blank" rel="noreferrer">
+                        GitHub ↗
+                    </a>
+                </li>
+                <li><br></li>
+                <li>
+                    <div class="mbl-login">
+                        <input type="email" id="mbl-email" placeholder="Email">
+                        <input type="password" id="mbl-password" placeholder="Password">
+                        <button onclick="login()">Login</button>
+                    </div>
+                </li>
+                <li>
+                    <div class="mbl-logout">
+                        <button onclick="logout()">Logout</button>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </div>
 </body>
 </html>
