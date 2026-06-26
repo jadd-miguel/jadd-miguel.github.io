@@ -6,10 +6,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     const session = data.session
 
     if(session) {
-        document.querySelector('.title').innerHTML  = "Lang-A-Day <i>As Privileged User</i>"
+        document.querySelector('.title').innerHTML  = "Lang-A-Day (Authenticated)"
     } else {
-        document.querySelector('.title').innerHTML  = "Lang-A-Day <i>As Demo User</i>"
-        ruleAndPoints.disabled = true
+        document.querySelector('.title').innerHTML  = "Lang-A-Day (Unauthenticated)"
+        ruleAndPointsBtn.disabled = true
     }
 })
 
@@ -25,13 +25,13 @@ class Rule {
 }
 
 function disableBtns(){
-    grabLangRulesBtn.disabled = true
-    ruleAndPointsBtn.disabled = true
+    grabLangRulesBtn.classList.add("inactive")
+    ruleAndPointsBtn.classList.add("inactive")
 }
 
 function enableBtns(){
-    grabLangRulesBtn.disabled = false
-    ruleAndPointsBtn.disabled = false
+    grabLangRulesBtn.classList.remove("inactive")
+    ruleAndPointsBtn.classList.remove("inactive")
 }
 
 

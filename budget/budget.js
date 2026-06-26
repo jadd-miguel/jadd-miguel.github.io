@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     const session = data.session
 
     if(session) {
-        document.querySelector('.title').innerHTML  = "Budget <i>As Privileged User</i>"
+        document.querySelector('.title').innerHTML  = "Budget (Authenticated)"
     } else {
-        document.querySelector('.title').innerHTML  = "Budget <i>As Demo User</i>";
+        document.querySelector('.title').innerHTML  = "Budget (Unauthenticated)";
         ["folderInput", "toRun", "toDemo"].forEach(id => document.getElementById(id).disabled = true)
     }
     wide_range()
