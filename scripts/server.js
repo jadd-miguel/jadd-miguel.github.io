@@ -9,8 +9,8 @@ const CLIENT = supabase.createClient(SERVER_URL, ANON_KEY, {auth: {
 const FILE_STORAGE = "my site"
 
 async function login() {
-    const email = document.getElementById("email").value
-    const password = document.getElementById("password").value
+    const email = document.getElementById(window.innerWidth > 1024 ? "email" : "mbl-email").value
+    const password = document.getElementById(window.innerWidth > 1024 ? "password" : "mbl-password").value
 
     document.getElementById("email").value = ""
     document.getElementById("password").value = ""
