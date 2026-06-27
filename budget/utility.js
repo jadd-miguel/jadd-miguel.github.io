@@ -189,5 +189,6 @@ function getCategoryByMerchant(merchant) {
 
         }
     }
+    console.log(merchant)
     return merchant
 }
