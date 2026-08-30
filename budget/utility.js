@@ -69,6 +69,7 @@ function get_df(raw_logs) {
     return df
 }
 
+const CATEGORY_SPECIAL = ["ARRIOLA A"]
 const CATEGORY_DISCARD = ["TFR", "THANK YOU", "PLACEHOLDER"]
 const AGG_VALUES = {NET: "Net", AMOUNT: "Amount", DEDUCT: "Deduct", CREDIT: "Credit"}
 const X_OPTIONS = { BY_DAY: "Days", BY_MONTH: "Months", BY_CATEGORY: "Categories" }
@@ -76,9 +77,13 @@ function group_by(df, agg_value, x_options) {
     let collect = {}
     for (const row of df) {
 
-        if(x_options == X_OPTIONS.BY_CATEGORY & CATEGORY_DISCARD.some(w => row.title.includes(w)))
+        IS_CAT_OPTION = x_options == X_OPTIONS.BY_CATEGORY
+        TO_DISCARD = CATEGORY_DISCARD.some(w => row.title.includes(w))
+        IS_SPECIAL = CATEGORY_SPECIAL.some(w => row.title.includes(w))
+
+        if(IS_CAT_OPTION & TO_DISCARD&& !IS_SPECIAL)
             continue
-        if(x_options != X_OPTIONS.BY_CATEGORY & agg_value != AGG_VALUES.AMOUNT & CATEGORY_DISCARD.some(w => row.title.includes(w)))
+        if(IS_CAT_OPTION & agg_value != AGG_VALUES.AMOUNT & TO_DISCARD&& !IS_SPECIAL)
             continue
 
         let key = ""

@@ -169,7 +169,7 @@ byCreditBtn.addEventListener("click", () => {
 let category_blueprint = null
 async function run_demo() {
     if(category_blueprint == null) {
-        const res = await fetchFile("categories6.json")
+        const res = await fetchFile("categories7.json")
         category_blueprint = JSON.parse(await res.text());
     }
     const res = await fetchFile("demo_budget.csv")
