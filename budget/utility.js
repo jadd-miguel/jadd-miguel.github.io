@@ -71,7 +71,7 @@ function get_df(raw_logs) {
 
 const CATEGORY_SPECIAL = ["ARRIOLA A"]
 const CATEGORY_DISCARD = ["TFR", "THANK YOU", "PLACEHOLDER"]
-const AGG_VALUES = {NET: "Net", AMOUNT: "Amount", DEDUCT: "Deduct", CREDIT: "Credit"}
+const AGG_VALUES = {NET: "Net", AMOUNT: "Amount", DEDUCT: "Deduct", CREDIT: "Credit", AVERAGE: "Average"}
 const X_OPTIONS = { BY_DAY: "Days", BY_MONTH: "Months", BY_CATEGORY: "Categories" }
 function group_by(df, agg_value, x_options) {
     let collect = {}
@@ -96,7 +96,7 @@ function group_by(df, agg_value, x_options) {
                 key = row.date.slice(0, 7) + "-01"
                 break
             case X_OPTIONS.BY_CATEGORY:
-                key = getCategoryByMerchant(row.title)
+                key = agg_value != AGG_VALUES.AVERAGE ? getCategoryByMerchant(row.title) : ""
                 break
         }
         let value = ""
@@ -105,6 +105,10 @@ function group_by(df, agg_value, x_options) {
                 value = row.amount
                 break
             case AGG_VALUES.NET:
+                value = row.net
+                break
+            case AGG_VALUES.AVERAGE:
+                key = row.date.slice(0, 7) + "-01 | " + getCategoryByMerchant(row.title)
                 value = row.net
                 break
             case AGG_VALUES.DEDUCT:
@@ -119,13 +123,43 @@ function group_by(df, agg_value, x_options) {
         }     
         collect[key].push(value)
     }
-    const agg = Object.entries(collect)
-        .map(([key, values]) => ({
-            key,
-            sum: agg_value == AGG_VALUES.AMOUNT ? 
-                values.at(-1) : values.reduce((a, b) => a+b, 0)
-        }))
+    let agg = null
+    if(agg_value == AGG_VALUES.AMOUNT)
+        agg = Object.entries(collect)
+            .map(([key, values]) => ({
+                key,
+                sum: values.at(-1)
+            }))
+    else if(agg_value == AGG_VALUES.AVERAGE)
+        agg = compileAvgMonthlyByCat(collect)
+    else
+        agg = Object.entries(collect)
+            .map(([key, values]) => ({
+                key,
+                sum: values.reduce((a, b) => a + b, 0)
+            }))
     return agg
+}
+
+function compileAvgMonthlyByCat(collect) {
+    const byCategory = {};
+    console.log(collect)
+    for (const [key, value] of Object.entries(collect)) {
+        const [date, cat] = key.split('|').map(s => s.trim());
+        const monthTotal = value.reduce((a, b) => a + b, 0);
+        (byCategory[cat] ??= []).push({ date, total: monthTotal });
+    }
+
+    return Object.entries(byCategory)
+        .filter(([cat, entries]) => new Set(entries.map(e => e.date)).size > 2)
+        .map(([cat, entries]) => {
+            const uniqueMonths = new Set(entries.map(e => e.date)).size;
+            const totalSum = entries.reduce((a, e) => a + e.total, 0);
+            return {
+                key: cat,
+                sum: totalSum / uniqueMonths
+            };
+        });
 }
 
 function fill_agg(agg, start, end) {

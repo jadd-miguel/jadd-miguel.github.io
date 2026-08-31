@@ -21,7 +21,7 @@ function update_plot(df) {
         agg_value = AGG_VALUES.CREDIT
     }
     drawNet(df, agg_value, x_option, date_range)
-    drawCat(df, date_range)
+    drawCat(df, x_option == X_OPTIONS.BY_DAY ? AGG_VALUES.NET : AGG_VALUES.AVERAGE, date_range)
 }
 
 function drawTrend(df, x_option, date_range) {
@@ -75,9 +75,9 @@ function drawNet(df, agg_value, x_option, date_range) {
     Plotly.newPlot("data_net", [pos_line, neg_line], layout)
 }
 
-function drawCat(df, date_range) {
+function drawCat(df, agg_value, date_range) {
     df = df.filter(x => x.date >= date_range.start && x.date <= date_range.end)
-    const agg = group_by(df, AGG_VALUES.NET, X_OPTIONS.BY_CATEGORY)
+    const agg = group_by(df, agg_value, X_OPTIONS.BY_CATEGORY)
     const sorted_agg = agg.sort((a, b) => Math.abs(b.sum) - Math.abs(a.sum))
     const [positive, negative] = splitAggPolarity(sorted_agg)
 
@@ -85,7 +85,7 @@ function drawCat(df, date_range) {
     const neg_line = createChartObject(negative, "bar", "Expenses", "red")
     
     const layout = {
-        title: { text: "Category Transactions" },
+        title: { text: agg_value + " Category Transactions" },
         xaxis: { title: { text: "Categories"} },
         yaxis: { type: "log", title: { text: "Total Amount ($)"} }
     }
