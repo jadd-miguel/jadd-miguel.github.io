@@ -71,7 +71,7 @@ function get_df(raw_logs) {
 
 const CATEGORY_SPECIAL = ["ARRIOLA A"]
 const CATEGORY_DISCARD = ["TFR", "THANK YOU", "PLACEHOLDER"]
-const AGG_VALUES = {NET: "Net", AMOUNT: "Amount", DEDUCT: "Deduct", CREDIT: "Credit", AVERAGE: "Average"}
+const AGG_VALUES = {NET: "Net", AMOUNT: "Amount", DEDUCT: "Deduct", CREDIT: "Credit", AVERAGE: "Average", M_AVERAGE: "Monthly Average"}
 const X_OPTIONS = { BY_DAY: "Days", BY_MONTH: "Months", BY_CATEGORY: "Categories" }
 function group_by(df, agg_value, x_options) {
     let collect = {}
@@ -107,6 +107,9 @@ function group_by(df, agg_value, x_options) {
             case AGG_VALUES.NET:
                 value = row.net
                 break
+            case AGG_VALUES.M_AVERAGE:
+                value = row.net
+                break
             case AGG_VALUES.AVERAGE:
                 key = row.date.slice(0, 7) + "-01 | " + getCategoryByMerchant(row.title)
                 value = row.net
@@ -132,6 +135,12 @@ function group_by(df, agg_value, x_options) {
             }))
     else if(agg_value == AGG_VALUES.AVERAGE)
         agg = compileAvgMonthlyByCat(collect)
+    else if(agg_value == AGG_VALUES.M_AVERAGE)
+        agg = Object.entries(collect)
+            .map(([key, values]) => ({
+                key,
+                sum: values.reduce((a, b) => a + b, 0) / values.length
+            }))
     else
         agg = Object.entries(collect)
             .map(([key, values]) => ({

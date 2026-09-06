@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         ["folderInput", "toRun", "toDemo"].forEach(id => document.getElementById(id).disabled = true)
     }
     wide_range()
-    createMonthSelect()
     run_demo()
 })
 
@@ -23,6 +22,20 @@ const month_select = document.getElementById("select_months")
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
 const year_form = document.createElement("select")
 const currentYear = new Date().getFullYear()
+
+function getDfDateBounds(df) {
+    const dates = df.map(r => r.date)
+    return {
+        min: dates.reduce((a, b) => a < b ? a : b),
+        max: dates.reduce((a, b) => a > b ? a : b)
+    }
+}
+
+function addMonths(dateStr, months) {
+    const d = new Date(dateStr)
+    d.setMonth(d.getMonth() + months)
+    return d.toISOString().split("T")[0]
+}
 
 function createMonthSelect() {
 
@@ -38,8 +51,15 @@ function createMonthSelect() {
                 update_plot(module_df)
             }
             else {
-                start_form.value = new Date(year_form.value, i, 1).toISOString().split("T")[0]
-                end_form.value = new Date(year_form.value, i+1, 0).toISOString().split("T")[0]
+                const { min, max } = getDfDateBounds(module_df)
+                const maxBuffered = addMonths(max, 4)
+
+                const monthStart = new Date(year_form.value, i, 1).toISOString().split("T")[0]
+                const monthEnd = new Date(year_form.value, i+1, 0).toISOString().split("T")[0]
+
+                start_form.value = monthStart < min ? min : monthStart
+                end_form.value = monthEnd > maxBuffered ? maxBuffered : monthEnd
+
                 update_plot(module_df)
 
                 Array.from(month_select.children).forEach(x => x.classList.remove('active'))
@@ -98,7 +118,9 @@ document.getElementById("toRun").addEventListener("click", async (e) => {
     e.preventDefault()
     byDayBtn.classList.add("active")
     byMonthBtn.classList.remove("active")
-    module_df = await files_to_df(files);
+    module_df = await files_to_df(files)
+    createCategoryList(false)
+    createMonthSelect()
     update_plot(module_df)
 })
 
@@ -166,14 +188,51 @@ byCreditBtn.addEventListener("click", () => {
     update_plot(module_df)
 })
 
+const category_list = document.getElementById("category_list")
+let active_category = null
+const DEMO_CATEGORIES = ["side-gig", "owed", "rebates", "hobbies", "grocery", "bills", "projects", "dining"]
+
+function getCategoryNames() {
+    return Object.keys(category_blueprint)
+}
+
+function createCategoryList(isDemo) {
+    const select = document.createElement("select")
+
+    if(!isDemo)
+        getCategoryNames().forEach(name => {
+            const option = document.createElement("option")
+            option.value = name
+            option.textContent = name
+            select.appendChild(option)
+        })
+    else
+        DEMO_CATEGORIES.forEach(name => {
+            const option = document.createElement("option")
+            option.value = name
+            option.textContent = name
+            select.appendChild(option)
+        })
+
+    select.onchange = () => {
+        active_category = select.value
+        update_plot(module_df)
+    }
+
+    active_category = select.value 
+    category_list.replaceChildren(select)
+}
+
 let category_blueprint = null
 async function run_demo() {
     if(category_blueprint == null) {
-        const res = await fetchFile("categories7.json")
+        const res = await fetchFile("categories8.json")
         category_blueprint = JSON.parse(await res.text());
     }
     const res = await fetchFile("demo_budget.csv")
     module_df = await files_to_df([res])
+    createCategoryList(true)
+    createMonthSelect()
     update_plot(module_df)
 }
 

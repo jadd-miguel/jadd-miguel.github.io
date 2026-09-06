@@ -22,6 +22,7 @@ function update_plot(df) {
     }
     drawNet(df, agg_value, x_option, date_range)
     drawCat(df, x_option == X_OPTIONS.BY_DAY ? AGG_VALUES.NET : AGG_VALUES.AVERAGE, date_range)
+    drawCatSplit(df, x_option == X_OPTIONS.BY_DAY ? AGG_VALUES.NET : AGG_VALUES.M_AVERAGE, date_range, active_category)
 }
 
 function drawTrend(df, x_option, date_range) {
@@ -90,6 +91,24 @@ function drawCat(df, agg_value, date_range) {
         yaxis: { type: "log", title: { text: "Total Amount ($)"} }
     }
     Plotly.newPlot("category", [pos_line, neg_line], layout)
+}
+
+function drawCatSplit(df, agg_value, date_range, category) {
+    let filtered = df.filter(x => x.date >= date_range.start && x.date <= date_range.end)
+    let custom = filtered.filter(x => getCategoryByMerchant(x.title) === category)
+
+    const target = (custom?.length ?? 0) === 0 ? filtered
+        .filter(x => x.title === category) : custom
+
+    let net_agg = group_by(target, agg_value, X_OPTIONS.BY_MONTH)
+    net_agg = net_agg.sort((a, b) => new Date(a.key) - new Date(b.key))
+
+    const layout = {
+        title: { text: category + " By Month" },
+        xaxis: { title: { text: "Months" } },
+        yaxis: { title: { text: agg_value + " ($)" } }
+    }
+    Plotly.newPlot("category_split", [createChartObject(net_agg, "lines+markers", category, "orange")], layout)
 }
 
 function createChartObject(data, type, name, color) {

@@ -36,9 +36,9 @@
                 <input type="file" id="folderInput" webkitdirectory multiple>
                 <button id="toRun">Run Selected</button>
                 <button id="toDemo">Run Demo</button>
-                <label>By: </label>
-                <button type="button" id="byDay" class="active">Day</button>
-                <button type="button" id="byMonth">Month</button>
+                <label>Detail: </label>
+                <button type="button" id="byDay" class="active">Fine</button>
+                <button type="button" id="byMonth">Coarse</button>
                 <label>Range: </label>
                 <input type="date" id="start-range">
                 <input type="date" id="end-range">
@@ -60,8 +60,16 @@
                 <button type="button" id="byNet" class="active">Net</button>
                 <button type="button" id="byDeduct">Deduct</button>
                 <button type="button" id="byCredit">Credit</button>
-            </form></div>
+            </form>
+        </div>
         <div class="budget-row" id="data_net"></div>
+        <div class="budget-row">
+            <form>
+                <label>Focused Category: </label>
+                <div id="category_list"></div> 
+            </form>
+        </div>
+        <div class="budget-row" id="category_split"></div>
         <div class="budget-row" id="category"></div>
     </div>
     <div class="for-mobile">
