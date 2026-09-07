@@ -38,6 +38,7 @@ function addMonths(dateStr, months) {
 }
 
 function createMonthSelect() {
+    month_select.replaceChildren()
 
     MONTHS.forEach((m, i) => {
         const m_btn = document.createElement("button")
